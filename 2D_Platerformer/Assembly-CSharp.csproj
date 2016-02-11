@@ -50,6 +50,22 @@
      <Compile Include="Assets\Episode 11\PlatformController.cs" />
      <Compile Include="Assets\Episode 11\Player.cs" />
      <Compile Include="Assets\Episode 11\RaycastController.cs" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Extra animations and enemies\Spritesheets\alienYellow.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Mushroom expansion\PNG\spritesheet.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\license.txt" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Extra animations and enemies\Spritesheets\alienGreen.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Base pack\Player\p1_spritesheet.txt" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Base pack\Tiles\tiles_spritesheet.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Extra animations and enemies\Spritesheets\alienPink.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Base pack\Player\p2_spritesheet.txt" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Base pack\Items\items_spritesheet.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Extra animations and enemies\Spritesheets\enemies.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Extra animations and enemies\Spritesheets\alienBeige.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Base pack\HUD\hud_spritesheet.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Base pack\Player\p3_spritesheet.txt" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Base pack\Enemies\enemies_spritesheet.txt" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Extra animations and enemies\Spritesheets\aliens.xml" />
+     <None Include="Assets\Platformer Art Complete Pack_0\Extra animations and enemies\Spritesheets\alienBlue.xml" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
