@@ -1,0 +1,12 @@
+﻿<Properties StartupConfiguration="{AD5C82F7-D411-5CA5-C81F-92949240E72F}|">
+  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/JustinGarza/GitHub/2DPlatformer-Tutorial/2D_Platerformer/Assets/Episode 11/E11Player.cs" relfile="Assets/Episode 11/E11Player.cs" line="234" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.2D__Platerformer PreferredExecutionTarget="Unity.Editor" />
+</Properties>
