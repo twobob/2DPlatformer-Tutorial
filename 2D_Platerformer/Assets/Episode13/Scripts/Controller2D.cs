@@ -158,7 +158,7 @@ public class Controller2D : RaycastController {
 				collisions.below = directionY == -1;
 				collisions.above = directionY == 1;
 
-				print("collision.below: " + collisions.below);
+				//print("collision.below: " + collisions.below);
 			}
 		}
 

@@ -106,11 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Episode 11\CameraFollow.cs" />
-    <Compile Include="Assets\Episode 11\Controller2D.cs" />
-    <Compile Include="Assets\Episode 11\E11Player.cs" />
-    <Compile Include="Assets\Episode 11\PlatformController.cs" />
-    <Compile Include="Assets\Episode 11\RaycastController.cs" />
+    <Compile Include="Assets\Episode13\Scripts\CameraAdj.cs" />
     <Compile Include="Assets\Episode13\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Episode13\Scripts\Controller2D.cs" />
     <Compile Include="Assets\Episode13\Scripts\PlatformController.cs" />

@@ -27,6 +27,12 @@ public class PlayerInput : MonoBehaviour
 		Vector2 directionalInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 		player.SetDirectionalInput(directionalInput);
 
+
+		if (Input.GetKeyDown(KeyCode.E))
+        {
+            player.OnDash();
+        }
+
 		if (
 			Input.GetAxisRaw("Vertical") < 0f
             && Input.GetKeyDown(KeyCode.Space)

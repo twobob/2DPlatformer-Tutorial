@@ -53,21 +53,25 @@ public class Player : MonoBehaviour {
 	float minJumpVelocity;
 	Vector3 velocity;
 	float velocityXSmoothing;
-   
+
+	Vector3 additionalVelocity;
+	public float decelerationTimeGrounded_AV;
+    public float decelerationTimeAirborne_AV;
+
 	Controller2D controller;   
 	Vector2 directionalInput;
 	public int faceDir = 1;
 
-	bool wallSliding;
+	public bool wallSliding;
 	int wallDirX;
 
 
-	//public bool CanDash = true;
-    //public float DashSpeed = 12;
-    //public float DashDuration = 0.25f;
-    //public float DashCoolDown = 0.5f;
-    //private float DashEndTime = -1000f;
-    //public bool IsDashing = false;
+	//public bool canDash = true;
+    //public float dashSpeed = 12;
+    //public float dashDuration = 0.25f;
+    //public float dashCoolDown = 0.5f;
+    //private float dashEndTime = -1000f;
+    //public bool isDashing = false;
 
 	void Start() 
 	{
@@ -84,8 +88,15 @@ public class Player : MonoBehaviour {
 
 	void Update() 
 	{
+
+		//wallJumpClimb.setXY();
+        //wallJumpOff.setXY();
+        //wallLeap.setXY();
+        
 		CalculateVelocity ();
 		HandleWallSliding ();
+
+		velocity += additionalVelocity;
 
 		controller.Move (velocity * Time.deltaTime, directionalInput);
 
@@ -108,8 +119,14 @@ public class Player : MonoBehaviour {
 
 		if (wallSliding)
 		{
+			print("");
 			airJumpCnt = 0;
 		}
+
+        
+		additionalVelocity.x = Mathf.Lerp(additionalVelocity.x, 0f, (controller.collisions.below) ? decelerationTimeGrounded_AV : decelerationTimeAirborne_AV);
+        additionalVelocity.y = Mathf.Lerp(additionalVelocity.y, 0f, (controller.collisions.below) ? decelerationTimeGrounded_AV : decelerationTimeAirborne_AV);
+
 
 		//print(controller.collisions.fallingThroughPlatformBelow);
 	}
@@ -120,7 +137,8 @@ public class Player : MonoBehaviour {
 	public void SetDirectionalInput (Vector2 input) 
 	{
 		directionalInput = input;
-		print(directionalInput.ToString());
+		directionalInput.Normalize();
+		//print(directionalInput.ToString());
 
 		if (directionalInput.x > 0)
 		{
@@ -153,41 +171,64 @@ public class Player : MonoBehaviour {
 
 	}
 
-	public bool CanDash = true;
-    public float DashSpeed = 12;
-    public float DashDuration = 0.25f;
-    public float DashCoolDown = 0.5f;
-    private float DashEndTime = -1000f;
-    public bool IsDashing = false;
+	public bool canDash = true;
+	public bool canOmniDash = false;
+    public float dashSpeed = 12;
+    public float dashDuration = 0.25f;
+    public float dashCoolDown = 0.5f;
+    private float dashEndTime = -1000f;
+    public bool isDashing = false;
 
-	public bool rightDash = false;
-	public bool leftDash = false;
+    public bool rightDash = false;
+    public bool leftDash = false;
+
+    public float getdashCoolDown()
+	{
+		return Mathf.Clamp((Time.time - dashEndTime) / dashCoolDown,0f,1f);
+	}
 
     public void OnDash(bool R)
 	{
-		if (CanDash && !IsDashing && Time.time - DashEndTime >= DashCoolDown)
+		if (canDash && !isDashing && Time.time - dashEndTime >= dashCoolDown)
 		{
-			Invoke("ResetIsDashing", DashDuration);
-			IsDashing = true;
+			Invoke("ResetisDashing", dashDuration);
+			isDashing = true;
 
 			rightDash = R;
 			leftDash = !R;
+
+			print("Dashed");
 		}
+
+		print(getdashCoolDown().ToString("f4"));
 	}
+
+	public void OnDash()
+    {
+        if (canDash && !isDashing && Time.time - dashEndTime >= dashCoolDown)
+        {
+            Invoke("ResetisDashing", dashDuration);
+            isDashing = true;
+            
+            print("Dashed");
+        }
+
+        print(getdashCoolDown().ToString("f4"));
+    }
 
     public void OffDash()
 	{
-		if (CanDash && IsDashing)
+		if (canDash && isDashing)
         {         
-			IsDashing = false;
-			DashEndTime = Time.time;
+			isDashing = false;
+			dashEndTime = Time.time;
         }
 	}
 
-	void ResetIsDashing()
+	void ResetisDashing()
     {
-        IsDashing = false;
-        DashEndTime = Time.time;
+        isDashing = false;
+        dashEndTime = Time.time;
     }
     
 
@@ -232,6 +273,8 @@ public class Player : MonoBehaviour {
 				print("     Force = " + wallLeap.Force + " ");
 				print("     XY = " + wallLeap.XY.ToString() + " ");
 			}
+
+			return;
 		}
 
 
@@ -355,21 +398,60 @@ public class Player : MonoBehaviour {
 
 	void CalculateVelocity() 
 	{
+
+
         
-		float Speed = (IsDashing) ? (DashSpeed * speedMultiplier * faceDir) : (moveSpeed * speedMultiplier * directionalInput.x);
+		float Speed = (isDashing) ? (dashSpeed * speedMultiplier * faceDir) : (moveSpeed * speedMultiplier * directionalInput.x);
 		float targetVelocityX =  Speed;
         
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
-		velocity.y += gravity * Time.deltaTime;
 
-		//if (IsDashing)
-		//{
-		//	velocity.y = 0;;
-		//}
+		//velocity.y += gravity * Time.deltaTime;
+
+		if (!isDashing)
+		{
+			velocity.y += gravity * Time.deltaTime;
+		}
+
+		//print(isDashing);
+		//print(canOmniDash);
+		//print(directionalInput);
+		//print((Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y)) > 0f);
+
+		//print(isDashing.ToString() + " " + directionalInput);
+		//print(Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y));
+
+		if (
+			isDashing && 
+		    canOmniDash && 
+		    ( Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y) ) > 0f 
+		   )
+		{
+			print("omniDashing");
+
+			velocity.x = directionalInput.x * dashSpeed * speedMultiplier ;
+			velocity.y = directionalInput.y * dashSpeed * speedMultiplier ;
+
+		}
   
 	}
 
  
+	void AddForce(Vector3 Force)
+    {
+        additionalVelocity += Force;
+    }
+
+    void AddForce(Vector2 Force)
+    {
+		additionalVelocity += new Vector3(Force.x,Force.y,0f);
+    }
+
+    void AddForce(float Angle, float Force)
+    {
+        Vector3 F = GetXYFromAngle(Angle, Force);
+        additionalVelocity += F;
+    }
 
 	private Vector2 GetXYFromAngle(float Angle, float Radius)
     {
@@ -399,9 +481,7 @@ public class Player : MonoBehaviour {
 			Gizmos.DrawLine(transform.position, transform.position + new Vector3(wallJumpOff.XY.x * wallDirX * -1f, wallJumpOff.XY.y, 0f));
 			Gizmos.DrawLine(transform.position, transform.position + new Vector3(wallLeap.XY.x * wallDirX * -1f, wallLeap.XY.y, 0f));
 		}
-
-
-
+        
 
     }
 }
