@@ -30,7 +30,7 @@ public class PlayerInput : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.E))
         {
-            player.OnDash();
+			player.OnDash();
         }
 
 		if (

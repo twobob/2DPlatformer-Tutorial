@@ -173,10 +173,14 @@ public class Player : MonoBehaviour {
 
 	public bool canDash = true;
 	public bool canOmniDash = false;
-    public float dashSpeed = 12;
-    public float dashDuration = 0.25f;
+
     public float dashCoolDown = 0.5f;
     private float dashEndTime = -1000f;
+
+	public float dashDistance = 3f;
+	public float dashSpeed = 0.5f;
+	float dashDistancePending = 0f;
+    
     public bool isDashing = false;
 
     public bool rightDash = false;
@@ -191,29 +195,44 @@ public class Player : MonoBehaviour {
 	{
 		if (canDash && !isDashing && Time.time - dashEndTime >= dashCoolDown)
 		{
-			Invoke("ResetisDashing", dashDuration);
+			//Invoke("ResetisDashing", dashDuration);
 			isDashing = true;
 
 			rightDash = R;
 			leftDash = !R;
+            
+			dashDistancePending = dashDistance;
 
-			print("Dashed");
+            StopCoroutine("dashing");
+            StartCoroutine("dashing");
+
+            //print("Dashed");
 		}
-
-		print(getdashCoolDown().ToString("f4"));
+        
+		//print(getdashCoolDown().ToString("f4"));
 	}
 
 	public void OnDash()
     {
         if (canDash && !isDashing && Time.time - dashEndTime >= dashCoolDown)
         {
-            Invoke("ResetisDashing", dashDuration);
-            isDashing = true;
-            
-            print("Dashed");
+            //Invoke("ResetisDashing", dashDuration);
+            //isDashing = true;
+
+			rightDash = (faceDir == 1) ? true: false;
+			leftDash = (faceDir == -1) ? true : false;
+
+			dashDistancePending = dashDistance;
+
+			StopCoroutine("dashing");
+			StartCoroutine("dashing");
+   
+            //print("Dashed");
         }
 
-        print(getdashCoolDown().ToString("f4"));
+		//isDashing = false;
+
+        //print(getdashCoolDown().ToString("f4"));
     }
 
     public void OffDash()
@@ -224,11 +243,111 @@ public class Player : MonoBehaviour {
 			dashEndTime = Time.time;
         }
 	}
-
-	void ResetisDashing()
+    
+	protected internal IEnumerator dashing()
     {
-        isDashing = false;
-        dashEndTime = Time.time;
+		velocity = Vector3.zero;
+
+		while (dashDistancePending > 0f)
+		{
+			float halfWidth = transform.localScale.x / 2f;
+			print(halfWidth);
+
+			if (canOmniDash)
+			{
+                
+				Vector3 dir = (directionalInput.x == 0f && directionalInput.y == 0f) ? new Vector3(faceDir, 0f, 0f) : (Vector3)directionalInput;
+				int dirX = (dir.x > 0f) ? 1: -1;
+				dirX = (dir.x == 0f) ? 0 : dirX;
+
+				int dirY = (dir.y > 0f) ? 1 : -1;
+				dirY = (dir.y == 0f) ? 0 : dirY;
+
+				RaycastHit2D hitH = Physics2D.Raycast(transform.position + new Vector3(halfWidth * dirX, 0f, 0f), new Vector3(dirX, 0f, 0f), dashDistance, controller.collisionMask);
+				RaycastHit2D hitV = Physics2D.Raycast(transform.position + new Vector3(0f,halfWidth * dirY, 0f), new Vector3(0f, dirY, 0f), dashDistance, controller.collisionMask);
+
+				Vector3 relDashSpeed = dashSpeed * (Vector3)directionalInput;
+				relDashSpeed.x = Mathf.Abs(relDashSpeed.x);
+				relDashSpeed.y = Mathf.Abs(relDashSpeed.y);
+				relDashSpeed.z = Mathf.Abs(relDashSpeed.z);
+
+				//print(relDashSpeed);
+                
+                if (hitH || hitV)
+				{
+					if (hitH)
+					{
+						if (hitH.distance <= relDashSpeed.x)
+                        {
+                            transform.position = transform.position + new Vector3(hitH.distance * dirX, 0f, 0f);
+                        }
+                        else
+                        {
+							transform.position = transform.position + new Vector3(relDashSpeed.x * dirX, 0f, 0f);
+                        }   
+					}
+
+                    if (hitV)
+					{
+						if (hitV.distance <= relDashSpeed.y)
+                        {
+							transform.position = transform.position + new Vector3(0f, hitV.distance * dirY, 0f);
+                        }
+                        else
+                        {
+							transform.position = transform.position + new Vector3(0f, relDashSpeed.y * dirY, 0f);
+                        }
+					}               
+
+
+				}
+				else               
+				{
+					transform.position = transform.position + (dir * dashSpeed);
+				}
+
+			}
+			else
+			{
+				//print(controller.raycastOrigins.bottomRight.x/2f);
+
+				RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(halfWidth * faceDir, 0f, 0f), new Vector3(faceDir, 0, 0f), dashDistance, controller.collisionMask);
+
+				if (hit)
+				{
+				    if (hit.distance <= dashSpeed)
+				    {
+				        transform.position = transform.position + new Vector3(hit.distance * faceDir, 0, 0f);
+				    }
+				    else
+				    {
+				        transform.position = transform.position + new Vector3(dashSpeed * faceDir, 0, 0f);
+				    }
+
+				}
+				else
+				{
+				    transform.position = transform.position + new Vector3(dashSpeed * faceDir, 0, 0f);
+				}
+
+				//if (
+				//	!controller.collisions.right && faceDir == 1
+				//	|| !controller.collisions.left && faceDir == -1
+				//    )
+				//{
+				//	transform.position = transform.position + new Vector3(dashSpeed * faceDir, 0, 0f);
+				//}
+			}
+
+            
+			dashDistancePending -= dashSpeed;
+
+            yield return null;
+        }
+
+		dashEndTime = Time.time;
+		isDashing = false;      
+
     }
     
 
@@ -398,10 +517,10 @@ public class Player : MonoBehaviour {
 
 	void CalculateVelocity() 
 	{
-
-
+    
         
-		float Speed = (isDashing) ? (dashSpeed * speedMultiplier * faceDir) : (moveSpeed * speedMultiplier * directionalInput.x);
+		//float Speed = (isDashing) ? (dashSpeed * speedMultiplier * faceDir) : (moveSpeed * speedMultiplier * directionalInput.x);
+		float Speed = moveSpeed * speedMultiplier * directionalInput.x;
 		float targetVelocityX =  Speed;
         
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
@@ -421,18 +540,18 @@ public class Player : MonoBehaviour {
 		//print(isDashing.ToString() + " " + directionalInput);
 		//print(Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y));
 
-		if (
-			isDashing && 
-		    canOmniDash && 
-		    ( Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y) ) > 0f 
-		   )
-		{
-			print("omniDashing");
+		//if (
+		//	isDashing && 
+		//    canOmniDash && 
+		//    ( Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y) ) > 0f 
+		//   )
+		//{
+		//	print("omniDashing");
 
-			velocity.x = directionalInput.x * dashSpeed * speedMultiplier ;
-			velocity.y = directionalInput.y * dashSpeed * speedMultiplier ;
+		//	velocity.x = directionalInput.x * dashSpeed * speedMultiplier ;
+		//	velocity.y = directionalInput.y * dashSpeed * speedMultiplier ;
 
-		}
+		//}
   
 	}
 
@@ -484,4 +603,7 @@ public class Player : MonoBehaviour {
         
 
     }
+
+
+
 }
