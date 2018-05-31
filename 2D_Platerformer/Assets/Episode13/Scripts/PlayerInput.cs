@@ -27,11 +27,12 @@ public class PlayerInput : MonoBehaviour
 		Vector2 directionalInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 		player.SetDirectionalInput(directionalInput);
 
-
+        /*
 		if (Input.GetKeyDown(KeyCode.E))
         {
 			player.OnDash();
         }
+        */
 
 		if (
 			Input.GetAxisRaw("Vertical") < 0f
@@ -64,6 +65,7 @@ public class PlayerInput : MonoBehaviour
            downPressPrevTime = Time.time;   
 		}
 
+        /*
 		if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
 			if (player.leftDash)
@@ -99,7 +101,7 @@ public class PlayerInput : MonoBehaviour
 
 			rightPressPrevTime = -1000f;
         }
-
+        */
 
 
 	}

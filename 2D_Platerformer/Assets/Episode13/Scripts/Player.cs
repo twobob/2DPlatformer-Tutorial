@@ -171,6 +171,8 @@ public class Player : MonoBehaviour {
 
 	}
 
+    /*
+    
 	public bool canDash = true;
 	public bool canOmniDash = false;
 
@@ -185,6 +187,7 @@ public class Player : MonoBehaviour {
 
     public bool rightDash = false;
     public bool leftDash = false;
+    
 
     public float getdashCoolDown()
 	{
@@ -350,6 +353,7 @@ public class Player : MonoBehaviour {
 
     }
     
+    */
 
 	public void OnJumpInputDown()
 	{
@@ -525,32 +529,11 @@ public class Player : MonoBehaviour {
         
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
 
-		//velocity.y += gravity * Time.deltaTime;
+		velocity.y += gravity * Time.deltaTime;
 
-		if (!isDashing)
-		{
-			velocity.y += gravity * Time.deltaTime;
-		}
-
-		//print(isDashing);
-		//print(canOmniDash);
-		//print(directionalInput);
-		//print((Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y)) > 0f);
-
-		//print(isDashing.ToString() + " " + directionalInput);
-		//print(Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y));
-
-		//if (
-		//	isDashing && 
-		//    canOmniDash && 
-		//    ( Mathf.Abs(directionalInput.x) + Mathf.Abs(directionalInput.y) ) > 0f 
-		//   )
+		//if (!isDashing)
 		//{
-		//	print("omniDashing");
-
-		//	velocity.x = directionalInput.x * dashSpeed * speedMultiplier ;
-		//	velocity.y = directionalInput.y * dashSpeed * speedMultiplier ;
-
+		//	velocity.y += gravity * Time.deltaTime;
 		//}
   
 	}
@@ -582,8 +565,7 @@ public class Player : MonoBehaviour {
 
 	//private bool FloatsEqual(float F1, float F2)
 	//{
-	//	float diff = Mathf.Abs(F1 - F2);
-
+	//	float diff = Mathf.Abs(F1 - F2);   
 	//	return (diff <= 0.01) ? true : false;
 	//}
 
