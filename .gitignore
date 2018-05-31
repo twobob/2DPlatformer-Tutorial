@@ -6,7 +6,7 @@
 /Assets/AssetStoreTools*
 
 #assets i don’t own
-*/Assets/InControl/
+/2D_Platerformer/Assets/InControl/
 
 # Visual Studio 2015 cache directory
 /.vs/
