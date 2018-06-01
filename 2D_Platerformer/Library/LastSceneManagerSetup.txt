@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Episode13/Scene.unity
+- path: Assets/2DPlatformer/Scene.unity
   isLoaded: 1
   isActive: 1
