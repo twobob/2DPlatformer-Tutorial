@@ -60,6 +60,9 @@ public class Player : MonoBehaviour {
 
 	Controller2D controller;   
 	Vector2 directionalInput;
+	//Vector2 directionalInputRounded;
+	int directionalInputX;
+	int directionalInputY;
 	public int faceDir = 1;
 
 	public bool wallSliding;
@@ -138,6 +141,15 @@ public class Player : MonoBehaviour {
 	{
 		directionalInput = input;
 		directionalInput.Normalize();
+
+		directionalInputX = (int)Mathf.Round(directionalInput.x);
+		directionalInputY = (int)Mathf.Round(directionalInput.y);
+
+		print(directionalInput);
+
+		//directionalInputRounded = new Vector2(Mathf.Round(directionalInputRounded.x), Mathf.Round(directionalInputRounded.y));
+  		//print(directionalInputRounded);
+        
 		//print(directionalInput.ToString());
 
 		if (directionalInput.x > 0)
@@ -171,7 +183,7 @@ public class Player : MonoBehaviour {
 
 	}
 
-    /*
+	/*
     
 	public bool canDash = true;
 	public bool canOmniDash = false;
@@ -355,35 +367,59 @@ public class Player : MonoBehaviour {
     
     */
 
+
+	void OnGUI()
+	{
+		const float h = 22.0f;
+		var y = 10.0f;
+
+		GUI.Label(new Rect(10, y, 300, y + h), "directionalInput: " + directionalInput.x.ToString() + " :: " + directionalInput.y.ToString());
+		y += h;
+
+		GUI.Label(new Rect(10, y, 300, y + h), "directionalInput: " + Mathf.Round(directionalInput.x).ToString() + " :: " + Mathf.Round(directionalInput.y).ToString());
+	}
+
 	public void OnJumpInputDown()
 	{
 
 		if (wallSliding)
 		{
+
+			//print(wallDirX == directionalInput.x);
+			//print(wallDirX);
+			//print(directionalInput.x);
+            
+			//print(directionalInputRounded);
+
 			//wallJumpClimb
 			//if (FloatsEqual(wallDirX,directionalInput.x))
-			if (Mathf.Approximately(wallDirX,directionalInput.x))	
+			//if (Mathf.Approximately(wallDirX,directionalInput.x))  
+			//if (wallDirX == directionalInputRounded.x)	
+			if (wallDirX == directionalInputX)
 			{
 				velocity.x = -wallDirX * (wallJumpClimb.XY.x * jumpMuliplyer);
 				velocity.y = (wallJumpClimb.XY.y * jumpMuliplyer);
 
-				print("wallJumpClimb: ");
-				print("     Angle = " + wallJumpClimb.Angle + " ");
-				print("     Force = " + wallJumpClimb.Force + " ");
-				print("     XY = " + wallJumpClimb.XY.ToString() + " ");
+				print("wallJumpClimb: \n" +
+				      " Angle = " + wallJumpClimb.Angle + "\n" +
+				      " Force = " + wallJumpClimb.Force + "\n" +
+				      " XY = " + wallJumpClimb.XY.ToString() + "");
 
 			}
 			//wallJumpOff
 			//else if (FloatsEqual(directionalInput.x,0f))
-			else if (Mathf.Approximately(directionalInput.x,0))   
+			//else if (Mathf.Approximately(directionalInput.x,0))   
+			//else if (directionalInputRounded.x == 0f)
+			else if (directionalInputX == 0)
 			{
 				velocity.x = -wallDirX * (wallJumpOff.XY.x * jumpMuliplyer) ;
 				velocity.y = (wallJumpOff.XY.y * jumpMuliplyer);
 
-				print("wallJumpOff: " );
-				print("     Angle = " + wallJumpOff.Angle + " ");
-				print("     Force = " + wallJumpOff.Force + " ");
-				print("     XY = " + wallJumpOff.XY.ToString() + " ");
+				print("wallJumpOff: \n" +
+				      " Angle = " + wallJumpOff.Angle + "\n" +
+				      " Force = " + wallJumpOff.Force + "\n" +
+				      " XY = " + wallJumpOff.XY.ToString() + "");
+				
 			}
 			//wallLeap
 			else
@@ -391,10 +427,11 @@ public class Player : MonoBehaviour {
 				velocity.x = -wallDirX * (wallLeap.XY.x * jumpMuliplyer);
 				velocity.y = (wallLeap.XY.y * jumpMuliplyer);
 
-				print("wallLeap: ");
-				print("     Angle = " + wallLeap.Angle + " ");
-				print("     Force = " + wallLeap.Force + " ");
-				print("     XY = " + wallLeap.XY.ToString() + " ");
+				print("wallLeap: \n" +
+				      " Angle = " + wallLeap.Angle + "\n" +
+				      " Force = " + wallLeap.Force + "\n" +
+				      " XY = " + wallLeap.XY.ToString() + "");
+				
 			}
 
 			return;
@@ -563,11 +600,11 @@ public class Player : MonoBehaviour {
         return new Vector2(X, Y);
     }
 
-	//private bool FloatsEqual(float F1, float F2)
-	//{
-	//	float diff = Mathf.Abs(F1 - F2);   
-	//	return (diff <= 0.01) ? true : false;
-	//}
+	private bool FloatsEqual(float F1, float F2)
+	{
+		float diff = Mathf.Abs(F1 - F2);   
+		return (diff <= 0.01) ? true : false;
+	}
 
 
 

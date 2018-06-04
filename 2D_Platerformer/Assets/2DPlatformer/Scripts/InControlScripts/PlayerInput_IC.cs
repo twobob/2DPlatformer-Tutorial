@@ -42,6 +42,7 @@ namespace MyInControlScript
         private float leftPressPrevTime = -1000f;
         private float leftPress = 0.5f;
 
+		CameraFollow cameraFollow;
 
 		void Start()
 		{
@@ -50,6 +51,9 @@ namespace MyInControlScript
 			player = GetComponent<Player>();
 
 			playerActions.Down.RepeatDelay = 0.5f;
+
+
+			cameraFollow = FindObjectOfType<CameraFollow>();
 		}
 
 
@@ -93,11 +97,11 @@ namespace MyInControlScript
 			//print("playerActions.Down.State: " + playerActions.Down.State);
 			//print("playerActions.Down.LastState: " + playerActions.Down.LastState);
 
-            //on hold down
-			if (playerActions.Down.WasRepeated)
-			{
-				player.fallThroughPlatform(false);
-			}
+   //         //on hold down
+			//if (playerActions.Down.WasRepeated)
+			//{
+			//	player.fallThroughPlatform(false);
+			//}
 
 
 			if (playerActions.Down.WasPressed)
@@ -111,6 +115,11 @@ namespace MyInControlScript
             }
 
 
+		}
+
+		void FixedUpdate()
+		{
+			cameraFollow.setAdjCameraPosition(new Vector2(playerActions.altMove.X,playerActions.altMove.Y));
 		}
 
 
@@ -136,6 +145,7 @@ namespace MyInControlScript
 			PlayerPrefs.Save();
 		}
 
+        
         /*
 		void OnGUI()
 		{
@@ -219,7 +229,8 @@ namespace MyInControlScript
 				playerActions.Reset();
 			}
 		}
-		*/
+        */
+
 	    
 	}
 }

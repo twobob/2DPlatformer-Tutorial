@@ -1,13 +1,8 @@
 ﻿<Properties StartupConfiguration="{AD5C82F7-D411-5CA5-C81F-92949240E72F}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Episode13/Scripts/InControlScripts/PlayerInput_IC.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/LowPolyNature/Scripts/PlayerController.cs">
     <Files>
-      <File FileName="Assets/InControl/Examples/MultiplayerWithBindings/Player.cs" Line="1" Column="1" />
-      <File FileName="Assets/Episode13/Scripts/PlayerInput.cs" Line="66" Column="4" />
-      <File FileName="Assets/Episode13/Scripts/InControlScripts/PlayerInput_IC.cs" Line="222" Column="5" />
-      <File FileName="Assets/InControl/Source/Control/OneAxisInputControl.cs" Line="205" Column="1" />
-      <File FileName="Assets/Episode13/Scripts/Controller2D.cs" Line="120" Column="83" NotebookId="1" />
-      <File FileName="Assets/Episode13/Scripts/InControlScripts/PlayerActions.cs" Line="48" Column="23" NotebookId="1" />
-      <File FileName="Assets/InControl/Source/Binding/PlayerActionSet.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/LowPolyNature/Scripts/Axe.cs" Line="1" Column="1" />
+      <File FileName="Assets/LowPolyNature/Scripts/PlayerController.cs" Line="274" Column="55" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

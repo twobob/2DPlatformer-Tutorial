@@ -30,17 +30,23 @@ public class CameraFollow : MonoBehaviour {
         focusArea = new FocusArea (target.collider.bounds, focusAreaSize);
     }
 
+	public void setAdjCameraPosition(Vector2 V2)
+	{
+		//adjCameraPosition = V2;
+        
+		adjCameraPosition = Vector3.MoveTowards(adjCameraPosition, V2 * maxAdjCamPos, adjCamPosSpeed);
+	}
+
+
     void LateUpdate() 
     {
         focusArea.Update (target.collider.bounds);
         
         Vector2 focusPosition = focusArea.centre + Vector2.up * verticalOffset;
 
-        Vector2 currentCameraPosition = new Vector2(Input.GetAxisRaw("altHorizontal"), Input.GetAxisRaw("altVertical")).normalized ;
-
-        currentCameraPosition = currentCameraPosition * maxAdjCamPos;
-        
-        adjCameraPosition = Vector3.MoveTowards(adjCameraPosition, currentCameraPosition, adjCamPosSpeed);
+        //Vector2 currentCameraPosition = new Vector2(Input.GetAxisRaw("altHorizontal"), Input.GetAxisRaw("altVertical")).normalized ;
+        //currentCameraPosition = currentCameraPosition * maxAdjCamPos;
+        //adjCameraPosition = Vector3.MoveTowards(adjCameraPosition, currentCameraPosition, adjCamPosSpeed);
 
         focusPosition.x += adjCameraPosition.x;
         focusPosition.y += adjCameraPosition.y;
