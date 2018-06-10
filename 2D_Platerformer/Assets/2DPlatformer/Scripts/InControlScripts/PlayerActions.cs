@@ -1,4 +1,16 @@
-﻿namespace MyInControlScript
+﻿//http://www.gallantgames.com/pages/incontrol-getting-started
+/*
+control.IsPressed;   // bool, is currently pressed
+control.WasPressed;  // bool, pressed since previous tick
+control.WasReleased; // bool, released since previous tick
+control.HasChanged;  // bool, has changed since previous tick
+control.State;       // bool, is currently pressed (same as IsPressed)
+control.Value;       // float, in range -1..1 for axes, 0..1 for buttons / triggers
+control.LastState;   // bool, previous tick state
+control.LastValue;   // float, previous tick value
+*/
+
+namespace MyInControlScript
 {
 	using InControl;
 	using UnityEngine;
@@ -8,12 +20,13 @@
 	{
 		public PlayerAction Melee;
 		public PlayerAction Jump;
+		public PlayerAction Dash;
 		public PlayerAction Left;
 		public PlayerAction Right;
 		public PlayerAction Up;
 		public PlayerAction Down;
 		public PlayerTwoAxisAction Move;
-        
+  
 		public PlayerAction altLeft;
 		public PlayerAction altRight;
 		public PlayerAction altUp;
@@ -29,6 +42,7 @@
 			Up = CreatePlayerAction( "Move Up" );
 			Down = CreatePlayerAction( "Move Down" );
 			Move = CreateTwoAxisPlayerAction( Left, Right, Down, Up );
+			Dash = CreatePlayerAction("Dash");
 
 			altLeft = CreatePlayerAction("Alt Move Left");
             altRight = CreatePlayerAction("Alt Move Right");
@@ -45,6 +59,9 @@
 			// How to set up mutually exclusive keyboard bindings with a modifier key.
 			// playerActions.Back.AddDefaultBinding( Key.Shift, Key.Tab );
 			// playerActions.Next.AddDefaultBinding( KeyCombo.With( Key.Tab ).AndNot( Key.Shift ) );
+
+			playerActions.Dash.AddDefaultBinding(Key.E);
+			playerActions.Dash.AddDefaultBinding(InputControlType.LeftBumper);
 
 			playerActions.Jump.AddDefaultBinding( Key.Space );
 			playerActions.Jump.AddDefaultBinding( InputControlType.Action1 );

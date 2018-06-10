@@ -90,6 +90,10 @@ namespace MyInControlScript
                 player.OnJumpInputUp();
             }
 
+			if (playerActions.Dash.WasPressed)
+			{
+				player.OnDash();
+			}
 
 			//print("playerActions.Down.RepeatDelay: " + playerActions.Down.RepeatDelay);
 			//print("playerActions.Down.FirstRepeatDelay: " + playerActions.Down.FirstRepeatDelay);

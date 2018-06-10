@@ -52,7 +52,32 @@ public class Controller2D : RaycastController {
 		}
 	}
 
-	void HorizontalCollisions(ref Vector2 moveAmount) {
+    
+	public RaycastHit2D QuickHorizontalRayCast(float direction, float distance)
+	{
+		Vector2 rayOrigin = (direction == -1) ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
+		rayOrigin += Vector2.up * 0.5f;
+
+		RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * direction, distance, collisionMask);
+        
+		Debug.DrawRay(rayOrigin, Vector2.right * distance, Color.cyan);
+
+		return hit;
+	}
+
+	public RaycastHit2D QuickVerticalRayCast(float direction, float distance)
+    {
+		Vector2 rayOrigin = (direction == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
+		rayOrigin += Vector2.right * 0.5f;
+
+		RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * distance, distance, collisionMask);
+
+        return hit;
+    }
+ 
+
+	void HorizontalCollisions(ref Vector2 moveAmount) 
+	{
 		float directionX = collisions.faceDir;
 		float rayLength = Mathf.Abs (moveAmount.x) + skinWidth;
 
@@ -60,7 +85,8 @@ public class Controller2D : RaycastController {
 			rayLength = 2*skinWidth;
 		}
 
-		for (int i = 0; i < horizontalRayCount; i ++) {
+		for (int i = 0; i < horizontalRayCount; i ++) 
+		{
 			Vector2 rayOrigin = (directionX == -1)?raycastOrigins.bottomLeft:raycastOrigins.bottomRight;
 			rayOrigin += Vector2.up * (horizontalRaySpacing * i);
 			RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
@@ -125,7 +151,7 @@ public class Controller2D : RaycastController {
 
 			if (hit) 
 			{
-				if (hit.collider.tag == "Through") 
+				if (hit.collider.tag == "DropThrough") 
 				{
                     
 					collisions.fallingThroughPlatformBelow = true;
@@ -179,7 +205,8 @@ public class Controller2D : RaycastController {
 		}
 	}
 
-	void ClimbSlope(ref Vector2 moveAmount, float slopeAngle, Vector2 slopeNormal) {
+	void ClimbSlope(ref Vector2 moveAmount, float slopeAngle, Vector2 slopeNormal) 
+	{
 		float moveDistance = Mathf.Abs (moveAmount.x);
 		float climbmoveAmountY = Mathf.Sin (slopeAngle * Mathf.Deg2Rad) * moveDistance;
 
